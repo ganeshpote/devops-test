@@ -3,7 +3,7 @@ services:
   - docker
 env:
   global:
-    - IMAGE_NAME=cartahub/devops
+    - IMAGE_NAME=ganeshpote1988/devops
     - IMAGE_REPO=ganeshpote1988/devops
 
 before_script:
@@ -19,6 +19,6 @@ before_deploy:
   - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${TRAVIS_BUILD_NUMBER}-develop"
 deploy:
   provider: script
-  script: docker push "${IMAGE_REPO}:${TRAVIS_BUILD_NUMBER}-develop"
+  script: docker push "${IMAGE_NAME}:${TRAVIS_BUILD_NUMBER}-develop"
   on:
     branch: master
