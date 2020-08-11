@@ -4,10 +4,10 @@ services:
 env:
   global:
     - IMAGE_NAME=ganeshpote1988/devops
-    - IMAGE_REPO=ganeshpote1988/devops
+    - BASE_IMAGE=cartahub/devops
 
 before_script:
-  - docker pull "$IMAGE_NAME" || true
+  - docker pull "$BASE_IMAGE" || true
 script:
   - docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "$IMAGE_NAME" .
 
