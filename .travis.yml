@@ -4,8 +4,6 @@ services:
 env:
   global:
     - IMAGE_NAME=cartahub/devops
-    - REGISTRY_USER=root
-    - REGISTRY_PASS=MyPassword@1234
 
 before_script:
   - docker pull "$IMAGE_NAME" || true
@@ -16,7 +14,7 @@ after_script:
   - docker images
 
 before_deploy:
-  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
   - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${git_sha}-develop"
 deploy:
