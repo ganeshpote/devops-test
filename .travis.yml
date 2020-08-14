@@ -1,26 +1,20 @@
-sudo: required
-services:
-  - docker
+sudo: true
+dist: trusty
+
 env:
   global:
     - IMAGE_NAME=ganeshpote1988/devops
-    - BASE_IMAGE=cartahub/devops
-
-before_script:
-  - docker pull "$BASE_IMAGE" || true
-script:
-  - docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "$IMAGE_NAME" .
-
-after_script:
-  - docker images
-
-script: python tests/tests.py
-
-before_deploy:
-  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
-  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${TRAVIS_BUILD_NUMBER}-develop"
-deploy:
-  provider: script
-  script: docker push "${IMAGE_NAME}:${TRAVIS_BUILD_NUMBER}-develop"
-  on:
-    branch: master
+   
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u="$DOCKER_USERNAME" --password-stdin
+      - pytest /tests/*
+      - docker build -t ${BASE_IMAGE} .
+      - docker images
+      - docker tag travis-ci-build-stages-demo $DOCKER_USERNAME/${BASE_IMAGE}
+      - docker push $DOCKER_USERNAME/${BASE_IMAGE}
+    - stage: test
+      script: docker run --rm $DOCKER_USERNAME/${BASE_IMAGE} cat hello.txt
+    - script: docker run --rm $DOCKER_USERNAME/${BASE_IMAGE} cat hello.txt
