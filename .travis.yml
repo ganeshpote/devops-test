@@ -13,7 +13,7 @@ script:
 
 after_script:
   - docker images
-  - python tests/tests.py
+  - pytest  /carta/devops/tests/*
 
 before_deploy:
   - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
