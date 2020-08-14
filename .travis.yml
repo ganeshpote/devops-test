@@ -13,6 +13,7 @@ script:
 
 after_script:
   - docker images
+  - pip install -r /carta/devops/requirements.txt
   - pytest  /carta/devops/tests/*
 
 before_deploy:
